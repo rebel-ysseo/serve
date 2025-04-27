@@ -39,9 +39,10 @@ public class MetricCollector implements Runnable {
             if (systemMetricsCmd.isEmpty()) {
                 systemMetricsCmd =
                         String.format(
-                                "%s --gpu %s",
+                                "%s --gpu %s --vendor %s",
                                 "ts/metrics/metric_collector.py",
-                                String.valueOf(configManager.getNumberOfGpu()));
+                                String.valueOf(configManager.getNumberOfGpu()),
+                                configManager.systemInfo.acceleratorVendor.toString());
             }
             args.addAll(Arrays.asList(systemMetricsCmd.split("\\s+")));
             File workingDir = new File(configManager.getModelServerHome());

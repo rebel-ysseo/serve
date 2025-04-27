@@ -51,7 +51,7 @@ def disk_available():
     system_metrics.append(Metric("DiskAvailable", data, "GB", dimension))
 
 
-def collect_gpu_metrics(num_of_gpus):
+def collect_gpu_metrics(num_of_gpus, vendor_of_gpu):
     """
     Collect GPU metrics. Supports NVIDIA and AMD GPUs.
     :param num_of_gpus: Total number of available GPUs.
@@ -60,12 +60,12 @@ def collect_gpu_metrics(num_of_gpus):
     if num_of_gpus <= 0:
         return
     for gpu_index in range(num_of_gpus):
-        if torch.version.cuda:
+        if vendor_of_gpu=="NVIDIA" and torch.version.cuda:
             free, total = torch.cuda.mem_get_info(gpu_index)
             mem_used = (total - free) // 1024**2
             gpu_mem_utilization = torch.cuda.memory_usage(gpu_index)
             gpu_utilization = torch.cuda.utilization(gpu_index)
-        elif torch.version.hip:
+        elif vendor_of_gpu=="AMD" and torch.version.hip:
             # There is currently a bug in
             # https://github.com/pytorch/pytorch/blob/838958de94ed3b9021ddb395fe3e7ed22a60b06c/torch/cuda/__init__.py#L1171
             # which does not capture the rate/percentage correctly.
@@ -88,7 +88,7 @@ def collect_gpu_metrics(num_of_gpus):
                     amdsmi.amdsmi_shut_down()
                 except amdsmi.AmdSmiException as e:
                     logging.error("Could not shut down AMD-SMI library.")
-        elif torch.backends.mps.is_available():
+        elif vendor_of_gpu=="APPLE" and torch.backends.mps.is_available():
             try:
                 total_memory = torch.mps.driver_allocated_memory()
                 mem_used = torch.mps.current_allocated_memory()
@@ -102,6 +102,39 @@ def collect_gpu_metrics(num_of_gpus):
                 mem_used = 0
                 gpu_mem_utilization = 0
                 gpu_utilization = None
+        elif vendor_of_gpu=="REBEL":
+            import subprocess
+            import json
+            import shutil
+            mem_used = 0
+            gpu_mem_utilization = 0
+            gpu_utilization = 0
+            rbln_stat = shutil.which("rbln-stat")
+            if rbln_stat :
+                try:
+                    stat = subprocess.run([rbln_stat, "-j"],
+                            capture_output=True,
+                            text=True,
+                            check=True)
+                    data = json.loads(stat.stdout)
+                    devices = data.get("devices", [])
+                    for device in devices:
+                        npu = device.get("npu")
+                        if device.get("npu") == str(gpu_index):
+                            mem_used = int(device.get("memory", {}).get("used", "0"))
+                            gpu_mem_utilization = round((mem_used/float(device.get("memory", {}).get("total", "0"))) * 100, 2) # Percentage
+                            mem_used = mem_used//1024**2 # Megabyte
+                            gpu_utilization = float(device.get("util", "0")) # Percentage
+                except Exception as e:
+                    logging.error(f"Could not utilize \"rbln-stat\". {e}")
+                    mem_used = 0
+                    gpu_mem_utilization = 0
+                    gpu_utilization = 0
+        else:
+            mem_used = 0
+            gpu_mem_utilization = 0
+            gpu_utilization = 0
+
 
         dimension_gpu = [
             Dimension("Level", "Host"),
@@ -121,7 +154,7 @@ def collect_gpu_metrics(num_of_gpus):
         )
 
 
-def collect_all(mod, num_of_gpus):
+def collect_all(mod, num_of_gpus, vendor_of_gpu):
     """
     Collect all system metrics.
 
@@ -136,7 +169,7 @@ def collect_all(mod, num_of_gpus):
             "collect_all",
         ):
             if value.__name__ == "collect_gpu_metrics":
-                value(num_of_gpus)
+                value(num_of_gpus, vendor_of_gpu)
             else:
                 value()
 
