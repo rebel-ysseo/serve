@@ -10,16 +10,15 @@ Rebellions has prepared documentation and tutorial examples to help you easily g
 
 - [Rebellions TorchServe supports document](https://docs.rbln.ai/software/model_serving/torchserve/torchserve.html)
 
-## Documentation for Rebellions TorchServe Support
-### Support matrix
+## Support matrix
 To utilize the RBLN NPU, please refer to the `Support Matrix` below:
 - [Support Matrix](https://docs.rbln.ai/supports/version_matrix.html)
 
-### Installation
+## Installation
 Please refer to the Installation Guide in the Rebellions documentation for instructions on installing the Driver and RBLN SDK.
 - [Installation Guide](https://docs.rbln.ai/getting_started/installation_guide.html)
 
-## TorchServe Serving with RBLN NPU
+## TorchServe with RBLN NPU
 
 To start properly, please refer to the Rebellions' TorchServe Tutorials.
 
@@ -35,7 +34,7 @@ Please refer to the `Docker Support` documentation.
 
 - [Docker Support](https://docs.rbln.ai/software/system_management/docker.html)
 
-## Multi device
+## Multi devices
 
 For monitoring NPU statistics and utilizing multiple RBLN NPUs, please refer to the `Device Management` documentation.
 
