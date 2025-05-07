@@ -50,7 +50,7 @@ def disk_available():
     data = psutil.disk_usage("/").free / (1024 * 1024 * 1024)  # in GB
     system_metrics.append(Metric("DiskAvailable", data, "GB", dimension))
 
-def rebel_support():
+def is_rbln_supported():
     try:
         import rebel
     except ImportError:
