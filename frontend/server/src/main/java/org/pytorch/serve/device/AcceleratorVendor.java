@@ -5,6 +5,6 @@ public enum AcceleratorVendor {
     NVIDIA,
     INTEL,
     APPLE,
-    REBEL,
+    RBLN,
     UNKNOWN
 }

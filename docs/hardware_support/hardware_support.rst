@@ -6,4 +6,4 @@
   linux_aarch64
   nvidia_mps
   Intel Extension for PyTorch <https://github.com/pytorch/serve/tree/master/examples/intel_extension_for_pytorch>
-  rebel_support
+  rbln_support

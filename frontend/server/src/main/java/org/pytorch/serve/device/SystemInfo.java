@@ -63,8 +63,8 @@ public class SystemInfo {
                 return new XpuUtil();
             case APPLE:
                 return new AppleUtil();
-            case REBEL:
-                return new RebelUtil();
+            case RBLN:
+                return new RblnUtil();
             default:
                 return null;
         }
@@ -110,7 +110,7 @@ public class SystemInfo {
         } else if (isCommandAvailable("system_profiler")) {
             return AcceleratorVendor.APPLE;
         } else if (isCommandAvailable("rbln-stat")) {
-            return AcceleratorVendor.REBEL;
+            return AcceleratorVendor.RBLN;
         }else {
             return AcceleratorVendor.UNKNOWN;
         }

@@ -13,7 +13,7 @@ import org.pytorch.serve.device.AcceleratorVendor;
 import org.pytorch.serve.device.interfaces.IAcceleratorUtility;
 import org.pytorch.serve.device.interfaces.IJsonSmiParser;
 
-public class RebelUtil implements IAcceleratorUtility, IJsonSmiParser {
+public class RblnUtil implements IAcceleratorUtility, IJsonSmiParser {
 
     @Override
     public String getGpuEnvVariableName() {
@@ -53,7 +53,7 @@ public class RebelUtil implements IAcceleratorUtility, IJsonSmiParser {
         long memoryTotal = gpuObject.getAsJsonObject("memory").get("total").getAsLong();
         long memoryUsed = gpuObject.getAsJsonObject("memory").get("used").getAsLong();
 
-        Accelerator accelerator = new Accelerator(model, AcceleratorVendor.REBEL, npuId);
+        Accelerator accelerator = new Accelerator(model, AcceleratorVendor.RBLN, npuId);
 
         // Set additional information
         accelerator.setUsagePercentage(npuUtil);
