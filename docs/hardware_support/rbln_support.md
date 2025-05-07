@@ -4,9 +4,7 @@ This project is no longer actively maintained. While existing releases remain av
 
 # Rebellions Support
 
-The RBLN (Rebellions) NPU can be properly utilized with TorchServe.
-
-Rebellions has prepared documentation and tutorial examples to help you easily get started using the RBLN NPU with TorchServe.
+RBLN (Rebellions) NPUs are fully compatible with TorchServe. Rebellions provides documentation and tutorials to help you easily get started using the RBLN NPU with TorchServe.
 
 - [Rebellions TorchServe supports document](https://docs.rbln.ai/software/model_serving/torchserve/torchserve.html)
 
