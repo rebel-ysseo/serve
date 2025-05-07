@@ -13,11 +13,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--gpu", action="store", help="number of GPUs", type=int)
-    parser.add_argument("--vendor", action="store", help="vendor of GPU", type=str)
     arguments = parser.parse_args()
 
     logging.basicConfig(stream=sys.stdout, format="%(message)s", level=logging.INFO)
 
-    system_metrics.collect_all(sys.modules["ts.metrics.system_metrics"], arguments.gpu, arguments.vendor)
+    system_metrics.collect_all(sys.modules["ts.metrics.system_metrics"], arguments.gpu)
 
     check_process_mem_usage(sys.stdin)

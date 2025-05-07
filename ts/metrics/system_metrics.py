@@ -50,8 +50,15 @@ def disk_available():
     data = psutil.disk_usage("/").free / (1024 * 1024 * 1024)  # in GB
     system_metrics.append(Metric("DiskAvailable", data, "GB", dimension))
 
+def rebel_support():
+    try:
+        import rebel
+    except ImportError:
+        return False
+    return True
 
-def collect_gpu_metrics(num_of_gpus, vendor_of_gpu):
+
+def collect_gpu_metrics(num_of_gpus):
     """
     Collect GPU metrics. Supports NVIDIA and AMD GPUs.
     :param num_of_gpus: Total number of available GPUs.
@@ -60,12 +67,12 @@ def collect_gpu_metrics(num_of_gpus, vendor_of_gpu):
     if num_of_gpus <= 0:
         return
     for gpu_index in range(num_of_gpus):
-        if vendor_of_gpu=="NVIDIA" and torch.version.cuda:
+        if torch.version.cuda:
             free, total = torch.cuda.mem_get_info(gpu_index)
             mem_used = (total - free) // 1024**2
             gpu_mem_utilization = torch.cuda.memory_usage(gpu_index)
             gpu_utilization = torch.cuda.utilization(gpu_index)
-        elif vendor_of_gpu=="AMD" and torch.version.hip:
+        elif torch.version.hip:
             # There is currently a bug in
             # https://github.com/pytorch/pytorch/blob/838958de94ed3b9021ddb395fe3e7ed22a60b06c/torch/cuda/__init__.py#L1171
             # which does not capture the rate/percentage correctly.
@@ -88,7 +95,7 @@ def collect_gpu_metrics(num_of_gpus, vendor_of_gpu):
                     amdsmi.amdsmi_shut_down()
                 except amdsmi.AmdSmiException as e:
                     logging.error("Could not shut down AMD-SMI library.")
-        elif vendor_of_gpu=="APPLE" and torch.backends.mps.is_available():
+        elif torch.backends.mps.is_available():
             try:
                 total_memory = torch.mps.driver_allocated_memory()
                 mem_used = torch.mps.current_allocated_memory()
@@ -102,7 +109,7 @@ def collect_gpu_metrics(num_of_gpus, vendor_of_gpu):
                 mem_used = 0
                 gpu_mem_utilization = 0
                 gpu_utilization = None
-        elif vendor_of_gpu=="REBEL":
+        elif rebel_support():
             import subprocess
             import json
             import shutil
@@ -154,7 +161,7 @@ def collect_gpu_metrics(num_of_gpus, vendor_of_gpu):
         )
 
 
-def collect_all(mod, num_of_gpus, vendor_of_gpu):
+def collect_all(mod, num_of_gpus):
     """
     Collect all system metrics.
 
@@ -169,7 +176,7 @@ def collect_all(mod, num_of_gpus, vendor_of_gpu):
             "collect_all",
         ):
             if value.__name__ == "collect_gpu_metrics":
-                value(num_of_gpus, vendor_of_gpu)
+                value(num_of_gpus)
             else:
                 value()
 
