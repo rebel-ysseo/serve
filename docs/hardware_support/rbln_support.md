@@ -8,7 +8,7 @@ RBLN (Rebellions) NPUs are fully compatible with TorchServe. Rebellions provides
 
 - [Rebellions TorchServe supports document](https://docs.rbln.ai/software/model_serving/torchserve/torchserve.html)
 
-## Support matrix
+## Support Matrix
 For details on supported features and compatibility of the RBLN NPU, see the `Support Matrix` below:
 - [Support Matrix](https://docs.rbln.ai/supports/version_matrix.html)
 
