@@ -32,7 +32,7 @@ Please refer to the `Docker Support` documentation.
 
 - [Docker Support](https://docs.rbln.ai/software/system_management/docker.html)
 
-## Multi devices
+## Multi Devices
 
 For monitoring NPU statistics and utilizing multiple RBLN NPUs, please refer to the `Device Management` documentation.
 
