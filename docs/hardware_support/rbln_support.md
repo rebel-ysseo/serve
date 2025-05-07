@@ -16,7 +16,7 @@ To utilize the RBLN NPU, please refer to the `Support Matrix` below:
 Please refer to the Installation Guide in the Rebellions documentation for instructions on installing the Driver and RBLN SDK.
 - [Installation Guide](https://docs.rbln.ai/getting_started/installation_guide.html)
 
-## TorchServe with RBLN NPU
+## TorchServe with RBLN NPUs
 
 To start properly, please refer to the Rebellions' TorchServe Tutorials.
 
